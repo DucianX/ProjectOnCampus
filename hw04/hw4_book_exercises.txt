@@ -1,6 +1,0 @@
-1. Yes, it is possible, when the user has not entered 0, but only positive and negative numbers
-2. Yes, it is possible, when the user has not entered 0, but only positive and negative numbers
-3. You will only be able to enter the number once. Bad, because you can not enter many numbers.
-4. 100
-5. Infinite zeros.
-9. 69 asterisks.
