@@ -1,0 +1,178 @@
+# class Board:
+    def __init__(self, SIZE, cellDivider, cellSize, STROKE_WEIGHT):
+        self.SIZE = SIZE
+        self.cellDivider = cellDivider
+        self.cellSize = cellSize
+        self.STROKE_WEIGHT = STROKE_WEIGHT
+        # Record existence
+        self.board_list = [[False] * (self.cellDivider + 1)
+                           for i in range(self.cellDivider + 1)]
+        # Record color
+        self.color_list = [[False] * (self.cellDivider + 1)
+                           for i in range(self.cellDivider + 1)]
+        # To keep track of the detect states of align stones
+        self.detected_alignments = set()
+
+    def is_occupied(self, x, y):
+        """To check if the place is empty"""
+        x = int(round(x / self.cellSize))
+        y = int(round(y / self.cellSize))
+        return self.board_list[x][y]
+
+    def record_location(self, x, y):
+        """To record the location of stones"""
+        x = int(x / self.cellSize)
+        y = int(y / self.cellSize)
+        self.board_list[x][y] = True
+    
+    def record_color(self, x, y, color):
+        # To record the color of stones
+        print("before:")
+        print(x, y)
+        x = int(x / self.cellSize)
+        y = int(y / self.cellSize)
+        print("after:")
+        print(x, y)
+        self.color_list[x][y] = color
+        print(self.color_list[x][y])
+
+    def display(self):
+        cellSize = self.cellSize
+        stroke(0)
+        strokeWeight(self.STROKE_WEIGHT)
+        # Draw vertical lines
+        for i in range(1, self.cellDivider):
+            line(cellSize * i, cellSize, cellSize * i,
+                 cellSize * (self.cellDivider - 1))
+        # Draw horizontal lines
+        for i in range(1, self.cellDivider):
+            line(cellSize, cellSize * i, cellSize * (self.cellDivider - 1),
+                 cellSize * i)
+
+    def get_nearest_point(self, x, y):
+        # Snap the x, y to the nearest intersection point
+        newX = self.get_back_to_board(round(x / self.cellSize) * self.cellSize)
+        newY = self.get_back_to_board(round(y / self.cellSize) * self.cellSize)
+        return newX, newY
+
+    def get_back_to_board(self, x):
+        """get the outsiders back into the board"""
+        if (x < self.cellSize):
+            x = self.cellSize
+        elif (x > (self.cellDivider - 1) * self.cellSize):
+            x = (self.cellDivider - 1) * self.cellSize
+        return x
+
+    def board_full(self):
+        for row in self.board_list:
+            for col in row:
+                if col == False:
+                    return False
+        return True
+
+    def detect_diagonal(self, COMBO_NUMBER):
+        # Iterate through the whole board
+        array_size = self.cellDivider + 1
+
+
+        # Function to check a single diagonal (upper left to lower right)
+        def check_diagonal_lr(row, col):
+            black_count = 0
+            white_count = 0
+
+            for i in range(COMBO_NUMBER):
+                # To see if random stones are align
+                # From upper left to lower right
+                if self.board_list[row + i][col + i]:
+                    if self.color_list[row + i][col + i] == "Black":
+                        black_count += 1
+                    elif self.color_list[row + i][col + i] == "White":
+                        white_count += 1
+                else:
+                    break # Break if there is a gap in the stones
+
+            return black_count == COMBO_NUMBER or white_count == COMBO_NUMBER
+
+        def check_diagonal_vertical(row, col):
+            black_count = 0
+            white_count = 0
+
+            for i in range(COMBO_NUMBER):
+                # To see if random stones are align
+                # From upper left to lower right
+                if self.board_list[row][col + i]:
+                    if self.color_list[row][col + i] == "Black":
+                        black_count += 1
+                    elif self.color_list[row][col + i] == "White":
+                        white_count += 1
+                else:
+                    break # Break if there is a gap in the stones
+
+            return black_count == COMBO_NUMBER or white_count == COMBO_NUMBER
+
+        def check_diagonal_horizon(row, col):
+            black_count = 0
+            white_count = 0
+
+            for i in range(COMBO_NUMBER):
+                # To see if random stones are align
+                # From upper left to lower right
+                if self.board_list[row + i][col]:
+                    if self.color_list[row + i][col] == "Black":
+                        black_count += 1
+                    elif self.color_list[row + i][col] == "White":
+                        white_count += 1
+                else:
+                    break # Break if there is a gap in the stones
+
+            return black_count == COMBO_NUMBER or white_count == COMBO_NUMBER
+
+
+        def check_diagonal_rl(row, col):
+            black_count = 0
+            white_count = 0
+            
+            for i in range(COMBO_NUMBER):
+                # To see if random stones are align
+                # From upper left to lower right
+                if self.board_list[row + i][col - i]:
+                    if self.color_list[row + i][col - i] == "Black":
+                        black_count += 1
+                    elif self.color_list[row + i][col - i] == "White":
+                        white_count += 1
+                else:
+                    break # Break if there is a gap in the stones
+
+            return black_count == COMBO_NUMBER or white_count == COMBO_NUMBER
+                           
+        # Iterate through the board for both diagonals
+        for row in range(array_size - COMBO_NUMBER):
+            for col in range(array_size - COMBO_NUMBER):
+                if check_diagonal_lr(row, col) and (row, col) not in self.detected_alignments:
+                    print("LR Alignment Detected")
+                    # record the first stone in the alignment to track the state of the whole sequence
+                    self.detected_alignments.add((row, col))
+                    return True
+            for col in range(COMBO_NUMBER - 1, array_size):
+                if check_diagonal_rl(row, col) and (row, col) not in self.detected_alignments:
+                    print("RL Alignment Detected")
+                    self.detected_alignments.add((row, col))
+                    return True
+            for col in range(1, array_size - COMBO_NUMBER):
+                if check_diagonal_horizon(row, col) and (row, col) not in self.detected_alignments:
+                    print("horizon Alignment Detected")
+                    self.detected_alignments.add((row, col))
+                    return True
+            for col in range(1, array_size):
+                if check_diagonal_vertical(row, col) and (row, col) not in self.detected_alignments:
+                    print("vertical Alignment Detected")
+                    self.detected_alignments.add((row, col))
+                    return True
+
+        def reset_detected_alignments(self):
+            self.detected_alignments.clear()
+
+        # def detect_game_over()
+            
+        return False
+                   

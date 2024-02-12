@@ -1,0 +1,55 @@
+from stone import Stone
+from board import Board
+
+SIZE = 1050
+STROKE_WEIGHT = 4
+R_OF_STONE = 30
+stones = []
+colorOfStone = "Black"
+cellDivider = 14 # equals to num of blocks - 1
+cellSize = SIZE / cellDivider
+board = Board(SIZE, cellDivider, cellSize, STROKE_WEIGHT)
+R = 210
+G = 180
+B = 140
+
+
+def setup():
+    """draw the background"""
+    size(SIZE, SIZE)
+    background(R, G, B)
+    textSize(150)
+    textAlign(CENTER, CENTER)
+
+def draw():
+    """draw the stones"""
+    global colorOfStone
+    board.display()
+    # Draw all stones
+    for stone in stones:
+        stone.display()
+    if board.board_full() == True:
+        text("GAME OVER", width / 2, height / 2)
+
+def mousePressed():
+    """place new stones and record their places"""
+    if board.board_full() == False:
+        global colorOfStone
+        x, y = board.get_nearest_point(mouseX, mouseY)
+        print(x)
+        print(y)
+        print("\n")
+        if not board.is_occupied(x, y):
+            # Player's turn
+            new_stone = Stone(x, y, R_OF_STONE, colorOfStone)
+            stones.append(new_stone)
+            new_stone.display()
+            colorOfStone = "White" if colorOfStone == "Black" else "Black"
+            board.record_location(x, y)
+
+#             # AI's turn
+#             ai_stone = Stone(xa, ya, r, colorOfStone)
+#             stones.append(ai_stone)
+#             ai_stone.display()
+#             colorOfStone = "White" if colorOfStone == "Black" else "Black"
+#             board.record_location(x, y)

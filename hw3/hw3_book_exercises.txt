@@ -1,0 +1,47 @@
+4.14
+1. true and false
+2. The term "Boolean" originates from the name of the British mathematician and logician George Boole. George Boole was an influential figure in the field of mathematics and logic during the 19th century. He developed a formal system of logic that came to be known as "Boolean algebra."
+3. 1
+4. 0
+5. In Python, any non-zero integer value, including -16, is considered True when evaluated in a Boolean context. 
+6. 
+    a. true
+    b. true
+    c. false
+    d. true
+    e. false
+    f. true
+    g. true
+    h. false
+    i. false
+    j. true
+    k. true
+    l. false
+7.
+    a. true
+    b. false
+    c. false
+    d. true
+    e. false
+    f. true
+    g. false
+    h. true
+    i. true
+    j. true
+    k. false
+    l. true
+    m. false
+    n. true
+    o. true  # caculate 'and' before 'or'
+    p. true
+    q. false
+    r. true
+    s. false
+    t. true
+    u. true
+    v. false
+    w. false
+    x. true
+    y. true
+    z. false
+

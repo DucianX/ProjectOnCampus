@@ -1,0 +1,26 @@
+In your ai.txt file, answer these questions:
+
+Did you attempt to make your computer player very smart -- i.e., do something more clever than just pick a random legal move?
+Yes
+
+If so, were you able to accomplish this? Is your computer player as smart as you would like?
+I did this mainly using 2d-array and suffering. Kind of.
+
+How did you determine which piece to play next? Tell us about your “pick next move” algorithm
+First, if AI can win, it takes that move.
+Then, it will pursue combo of 3 or 4.
+Then, it will block player's combo of 3.
+Then, it will block player's potential link (i.e. 3+1 or 4+1)
+At last, if all these is not detected, it will stick to the player's move.
+
+
+How often did your computer program beat you, or your friends, or whoever tested it out for you?
+Like 50-50?
+
+
+How easy would it be to make the difficulty level adjustable?
+We can delete some algo and make it easier.
+
+
+How would you improve it in the future?
+One last bug: sometimes it will give up 4-5 winning chance. I may finish that later on.
